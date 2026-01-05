@@ -18,6 +18,16 @@ import ExpiringDocuments from './components/documents/ExpiringDocuments';
 // Admin Components
 import PendingCarsAdmin from './components/admin/PendingCarsAdmin';
 import PendingDocumentsAdmin from './components/admin/PendingDocumentsAdmin';
+// Marketplace Components
+import { ProductList, ProductDetail, Cart, Checkout } from './components/marketplace';
+// Car Sales Components
+import { CarListings, CarDetail } from './components/cars';
+// Order Components
+import { OrderSuccess, OrderHistory, OrderDetail } from './components/orders';
+// Vendor Components
+import { VendorDashboard, VendorRegister } from './components/vendor';
+// Test Drive Components
+import { MyTestDrives } from './components/testdrives';
 import './App.css';
 
 const AdminRoute = ({ children }) => {
@@ -171,6 +181,79 @@ function App() {
                 <AdminRoute>
                   <PendingDocumentsAdmin />
                 </AdminRoute>
+              }
+            />
+            {/* Marketplace Routes */}
+            <Route path="/marketplace" element={<ProductList />} />
+            <Route path="/marketplace/product/:id" element={<ProductDetail />} />
+            <Route
+              path="/cart"
+              element={
+                <PrivateRoute>
+                  <Cart />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/checkout"
+              element={
+                <PrivateRoute>
+                  <Checkout />
+                </PrivateRoute>
+              }
+            />
+            {/* Order Routes */}
+            <Route
+              path="/order-success"
+              element={
+                <PrivateRoute>
+                  <OrderSuccess />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                <PrivateRoute>
+                  <OrderHistory />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/orders/:id"
+              element={
+                <PrivateRoute>
+                  <OrderDetail />
+                </PrivateRoute>
+              }
+            />
+            {/* Car Sales Routes */}
+            <Route path="/cars" element={<CarListings />} />
+            <Route path="/car/:id" element={<CarDetail />} />
+            {/* Vendor Routes */}
+            <Route
+              path="/vendor/register"
+              element={
+                <PrivateRoute>
+                  <VendorRegister />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/vendor/dashboard"
+              element={
+                <PrivateRoute>
+                  <VendorDashboard />
+                </PrivateRoute>
+              }
+            />
+            {/* Test Drive Routes */}
+            <Route
+              path="/my-test-drives"
+              element={
+                <PrivateRoute>
+                  <MyTestDrives />
+                </PrivateRoute>
               }
             />
           </Routes>
