@@ -22,6 +22,7 @@ const FAQ = () => {
 
   useEffect(() => {
     fetchFAQs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCategory, searchTerm]);
 
   const fetchFAQs = async () => {

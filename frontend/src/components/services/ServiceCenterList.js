@@ -32,6 +32,7 @@ const ServiceCenterList = () => {
 
   useEffect(() => {
     fetchCenters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, page, userLocation]);
 
   const fetchCenters = async () => {

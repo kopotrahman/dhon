@@ -19,6 +19,7 @@ const ForumList = () => {
   useEffect(() => {
     fetchPosts();
     fetchPopularTags();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, page]);
 
   const fetchPosts = async () => {
@@ -49,7 +50,7 @@ const ForumList = () => {
 
   const handleLike = async (postId) => {
     try {
-      const response = await forumAPI.toggleLike(postId);
+      await forumAPI.toggleLike(postId);
       setPosts(prev => prev.map(post => 
         post._id === postId 
           ? { ...post, likes: post.likes.includes(user._id) 

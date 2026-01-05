@@ -16,6 +16,7 @@ const ForumPost = () => {
 
   useEffect(() => {
     fetchPost();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId]);
 
   const fetchPost = async () => {
@@ -182,7 +183,7 @@ const ForumPost = () => {
         {post.images && post.images.length > 0 && (
           <div className="post-images-gallery">
             {post.images.map((img, index) => (
-              <img key={index} src={img} alt={`Post image ${index + 1}`} />
+              <img key={index} src={img} alt={`Attachment ${index + 1}`} />
             ))}
           </div>
         )}

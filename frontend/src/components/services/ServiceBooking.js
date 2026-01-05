@@ -22,6 +22,7 @@ const ServiceBooking = () => {
 
   useEffect(() => {
     Promise.all([fetchCenter(), fetchMyCars()]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [centerId]);
 
   const fetchCenter = async () => {
