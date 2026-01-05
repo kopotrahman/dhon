@@ -18,6 +18,11 @@ const orderRoutes = require('./routes/orderRoutes');
 const vendorRoutes = require('./routes/vendorRoutes');
 const testDriveRoutes = require('./routes/testDriveRoutes');
 const carSalesRoutes = require('./routes/carSalesRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
+const serviceCenterRoutes = require('./routes/serviceCenterRoutes');
+const forumRoutes = require('./routes/forumRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
+const supportRoutes = require('./routes/supportRoutes');
 
 const app = express();
 const server = http.createServer(app);
@@ -50,6 +55,11 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/vendors', vendorRoutes);
 app.use('/api/test-drives', testDriveRoutes);
 app.use('/api/car-sales', carSalesRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/service-centers', serviceCenterRoutes);
+app.use('/api/forum', forumRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/support', supportRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
