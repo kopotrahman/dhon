@@ -12,6 +12,12 @@ const jobRoutes = require('./routes/jobRoutes');
 const carRoutes = require('./routes/carRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const marketplaceRoutes = require('./routes/marketplaceRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const vendorRoutes = require('./routes/vendorRoutes');
+const testDriveRoutes = require('./routes/testDriveRoutes');
+const carSalesRoutes = require('./routes/carSalesRoutes');
 
 const app = express();
 const server = http.createServer(app);
@@ -38,6 +44,12 @@ app.use('/api/jobs', jobRoutes);
 app.use('/api/cars', carRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/marketplace', marketplaceRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/vendors', vendorRoutes);
+app.use('/api/test-drives', testDriveRoutes);
+app.use('/api/car-sales', carSalesRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

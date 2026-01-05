@@ -2,6 +2,7 @@ const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
 const Payment = require('../models/Payment');
+const Vendor = require('../models/Vendor');
 const Notification = require('../models/Notification');
 const { generateInvoice } = require('../utils/invoiceGenerator');
 const { sendNotification } = require('../utils/notificationService');
@@ -9,63 +10,136 @@ const { sendNotification } = require('../utils/notificationService');
 // Create order from cart
 const createOrder = async (req, res) => {
   try {
-    const { shippingAddress, paymentMethod } = req.body;
+    const { shippingAddress, billingAddress, paymentMethod, notes } = req.body;
 
     const cart = await Cart.findOne({ user: req.user._id }).populate('items.product');
     
-    if (!cart || cart.items.length === 0) {
+    if (!cart || cart.activeItems.length === 0) {
       return res.status(400).json({ message: 'Cart is empty' });
     }
 
-    // Check stock availability
-    for (const item of cart.items) {
-      if (item.product.stock < item.quantity) {
-        return res.status(400).json({ 
-          message: `Insufficient stock for ${item.product.name}` 
-        });
+    // Check stock availability and build items
+    const orderItems = [];
+    const stockIssues = [];
+
+    for (const item of cart.activeItems) {
+      if (!item.product || !item.product.isActive) {
+        stockIssues.push({ name: item.product?.name || 'Unknown', issue: 'Product unavailable' });
+        continue;
       }
+
+      if (item.product.trackInventory && item.product.stock < item.quantity) {
+        stockIssues.push({ 
+          name: item.product.name, 
+          issue: 'Insufficient stock',
+          available: item.product.stock 
+        });
+        continue;
+      }
+
+      orderItems.push({
+        product: item.product._id,
+        productSnapshot: {
+          name: item.product.name,
+          sku: item.product.sku,
+          image: item.product.images?.[0]?.url
+        },
+        vendor: item.product.vendor,
+        quantity: item.quantity,
+        price: item.product.price,
+        totalPrice: item.product.price * item.quantity
+      });
     }
 
-    // Calculate total
-    const items = cart.items.map(item => ({
-      product: item.product._id,
-      quantity: item.quantity,
-      price: item.product.price
-    }));
+    if (stockIssues.length > 0) {
+      return res.status(400).json({ 
+        message: 'Some items have availability issues',
+        issues: stockIssues 
+      });
+    }
 
-    const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    // Calculate totals
+    const subtotal = orderItems.reduce((sum, item) => sum + item.totalPrice, 0);
+    const shippingCost = subtotal > 100 ? 0 : 10; // Free shipping over $100
+    const taxRate = 0.08;
+    const taxAmount = subtotal * taxRate;
+    const discount = cart.couponDiscount || 0;
+    const totalAmount = subtotal + shippingCost + taxAmount - discount;
 
     // Create order
     const order = new Order({
       customer: req.user._id,
-      items,
+      items: orderItems,
+      subtotal,
+      shippingCost,
+      taxAmount,
+      discount: {
+        code: cart.couponCode,
+        amount: discount
+      },
       totalAmount,
       shippingAddress,
-      status: 'pending'
+      billingAddress: billingAddress?.sameAsShipping ? { ...shippingAddress, sameAsShipping: true } : billingAddress,
+      payment: {
+        method: paymentMethod,
+        status: 'pending'
+      },
+      notes: {
+        customer: notes
+      },
+      statusHistory: [{
+        status: 'pending',
+        note: 'Order placed'
+      }]
     });
 
     await order.save();
 
-    // Update product stock
-    for (const item of cart.items) {
-      await Product.findByIdAndUpdate(item.product._id, {
-        $inc: { stock: -item.quantity }
+    // Update product stock and vendor sales
+    for (const item of orderItems) {
+      await Product.findByIdAndUpdate(item.product, {
+        $inc: { stock: -item.quantity, totalSold: item.quantity }
       });
+
+      if (item.vendor) {
+        await Vendor.findByIdAndUpdate(item.vendor, {
+          $inc: { totalSales: item.totalPrice }
+        });
+      }
     }
 
     // Clear cart
-    cart.items = [];
-    await cart.save();
+    await cart.clearCart();
 
     // Send notification
     await sendNotification({
       recipient: req.user._id,
       type: 'payment',
       title: 'Order Placed',
-      message: `Your order #${order._id} has been placed successfully.`
+      message: `Your order #${order.orderNumber} has been placed successfully.`,
+      data: { orderId: order._id, orderNumber: order.orderNumber }
     });
 
-    res.status(201).json({ message: 'Order created successfully', order });
+    // Notify vendors
+    const vendorIds = [...new Set(orderItems.filter(i => i.vendor).map(i => i.vendor.toString()))];
+    for (const vendorId of vendorIds) {
+      const vendor = await Vendor.findById(vendorId);
+      if (vendor) {
+        await sendNotification({
+          recipient: vendor.user,
+          type: 'order',
+          title: 'New Order Received',
+          message: `You have received a new order #${order.orderNumber}`,
+          data: { orderId: order._id }
+        });
+      }
+    }
+
+    res.status(201).json({ 
+      message: 'Order created successfully', 
+      order,
+      orderNumber: order.orderNumber
+    });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
