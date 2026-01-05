@@ -697,4 +697,3 @@ module.exports = {
   getMyNegotiations,
   sendNegotiationMessage
 };
-};
