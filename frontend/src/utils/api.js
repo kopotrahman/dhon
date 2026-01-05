@@ -114,4 +114,103 @@ export const carAPI = {
   approveCar: (id, data) => api.post(`/cars/${id}/approve`, data),
 };
 
+// ==================== REVIEW API ====================
+export const reviewAPI = {
+  createReview: (data) => api.post('/reviews', data),
+  getReviews: (params) => api.get('/reviews', { params }),
+  getReviewById: (id) => api.get(`/reviews/${id}`),
+  updateReview: (id, data) => api.put(`/reviews/${id}`, data),
+  deleteReview: (id) => api.delete(`/reviews/${id}`),
+  getPendingReviews: () => api.get('/reviews/admin/pending'),
+  moderateReview: (id, data) => api.put(`/reviews/${id}/moderate`, data),
+};
+
+// ==================== SERVICE CENTER API ====================
+export const serviceCenterAPI = {
+  getCenters: (params) => api.get('/service-centers', { params }),
+  getCenterById: (id) => api.get(`/service-centers/${id}`),
+  createCenter: (data) => api.post('/service-centers', data),
+  updateCenter: (id, data) => api.put(`/service-centers/${id}`, data),
+  deleteCenter: (id) => api.delete(`/service-centers/${id}`),
+  bookService: (centerId, data) => api.post(`/service-centers/${centerId}/book`, data),
+  getMyServiceBookings: (params) => api.get('/service-centers/bookings/my', { params }),
+  updateServiceBookingStatus: (bookingId, data) => api.put(`/service-centers/bookings/${bookingId}/status`, data),
+  getGPSTracking: (carId) => api.get(`/service-centers/gps/${carId}`),
+  updateGPSLocation: (carId, data) => api.put(`/service-centers/gps/${carId}/location`, data),
+  getGPSHistory: (carId) => api.get(`/service-centers/gps/${carId}/history`),
+};
+
+// ==================== FORUM API ====================
+export const forumAPI = {
+  getPosts: (params) => api.get('/forum', { params }),
+  getPostById: (id) => api.get(`/forum/${id}`),
+  createPost: (data) => api.post('/forum', data, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  updatePost: (id, data) => api.put(`/forum/${id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  deletePost: (id) => api.delete(`/forum/${id}`),
+  toggleLike: (id) => api.post(`/forum/${id}/like`),
+  addComment: (id, content) => api.post(`/forum/${id}/comments`, { content }),
+  deleteComment: (postId, commentId) => api.delete(`/forum/${postId}/comments/${commentId}`),
+  getPopularTags: () => api.get('/forum/tags/popular'),
+  moderatePost: (id, data) => api.put(`/forum/${id}/moderate`, data),
+};
+
+// ==================== NOTIFICATION API ====================
+export const notificationAPI = {
+  getNotifications: (params) => api.get('/notifications', { params }),
+  markAsRead: (id) => api.put(`/notifications/${id}/read`),
+  markAllAsRead: () => api.put('/notifications/read-all'),
+  deleteNotification: (id) => api.delete(`/notifications/${id}`),
+  deleteReadNotifications: () => api.delete('/notifications/read/all'),
+  getSettings: () => api.get('/notifications/settings'),
+  updateSettings: (data) => api.put('/notifications/settings', data),
+  sendNotification: (data) => api.post('/notifications/send', data),
+  sendBulkNotification: (data) => api.post('/notifications/send-bulk', data),
+};
+
+// ==================== SUPPORT API ====================
+export const supportAPI = {
+  // FAQ
+  getFAQs: (params) => api.get('/support/faq', { params }),
+  createFAQ: (data) => api.post('/support/faq', data),
+  updateFAQ: (id, data) => api.put(`/support/faq/${id}`, data),
+  deleteFAQ: (id) => api.delete(`/support/faq/${id}`),
+  
+  // Tickets
+  createTicket: (data) => api.post('/support/tickets', data),
+  getMyTickets: (params) => api.get('/support/tickets/my', { params }),
+  getTicketById: (id) => api.get(`/support/tickets/${id}`),
+  respondToTicket: (id, message) => api.post(`/support/tickets/${id}/respond`, { message }),
+  updateTicketStatus: (id, data) => api.put(`/support/tickets/${id}/status`, data),
+  getAllTickets: (params) => api.get('/support/tickets', { params }),
+  
+  // Messages
+  getConversations: () => api.get('/support/messages/conversations'),
+  getMessages: (userId, params) => api.get(`/support/messages/${userId}`, { params }),
+  sendMessage: (data) => api.post('/support/messages', data),
+};
+
+// ==================== ADMIN API ====================
+export const adminAPI = {
+  // Dashboard
+  getDashboardStats: () => api.get('/admin/dashboard'),
+  getRevenueAnalytics: (params) => api.get('/admin/analytics/revenue', { params }),
+  
+  // Users
+  getUsers: (params) => api.get('/admin/users', { params }),
+  getUserById: (id) => api.get(`/admin/users/${id}`),
+  updateUser: (id, data) => api.put(`/admin/users/${id}`, data),
+  deleteUser: (id) => api.delete(`/admin/users/${id}`),
+  
+  // Approvals
+  getPendingApprovals: (type) => api.get('/admin/pending-approvals', { params: { type } }),
+  approveEntity: (type, id, data) => api.post(`/admin/approve/${type}/${id}`, data),
+  
+  // Content Moderation
+  getFlaggedContent: (type) => api.get('/admin/flagged-content', { params: { type } }),
+  
+  // Reports
+  getReports: () => api.get('/admin/reports'),
+  handleReport: (id, data) => api.put(`/admin/reports/${id}`, data),
+};
+
 export default api;
