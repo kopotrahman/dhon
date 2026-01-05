@@ -12,16 +12,28 @@ export const useTheme = () => {
 
 export const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    const saved = localStorage.getItem('darkMode');
-    if (saved !== null) {
-      return JSON.parse(saved);
+    try {
+      const saved = localStorage.getItem('darkMode');
+      if (saved !== null) {
+        return JSON.parse(saved);
+      }
+    } catch (error) {
+      console.error('Error reading darkMode from localStorage:', error);
     }
     // Check system preference
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    try {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    } catch (error) {
+      return false;
+    }
   });
 
   useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+    try {
+      localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+    } catch (error) {
+      console.error('Error saving darkMode to localStorage:', error);
+    }
     if (isDarkMode) {
       document.documentElement.classList.add('dark-mode');
     } else {

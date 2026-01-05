@@ -124,8 +124,8 @@ const Chat = () => {
               <div className="conv-info">
                 <span className="conv-name">{conv.user.name}</span>
                 <span className="conv-preview">
-                  {conv.lastMessage?.content?.substring(0, 30)}
-                  {conv.lastMessage?.content?.length > 30 ? '...' : ''}
+                  {conv.lastMessage?.content ? conv.lastMessage.content.substring(0, 30) : ''}
+                  {conv.lastMessage?.content && conv.lastMessage.content.length > 30 ? '...' : ''}
                 </span>
               </div>
               {conv.unreadCount > 0 && (

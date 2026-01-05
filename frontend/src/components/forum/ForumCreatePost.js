@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { forumAPI } from '../../utils/api';
 import './Forum.css';
@@ -14,6 +14,18 @@ const ForumCreatePost = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Create object URLs for image previews
+  const imageUrls = useMemo(() => {
+    return images.map(img => URL.createObjectURL(img));
+  }, [images]);
+
+  // Cleanup object URLs on unmount or when images change
+  useEffect(() => {
+    return () => {
+      imageUrls.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [imageUrls]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -172,9 +184,9 @@ const ForumCreatePost = () => {
           
           {images.length > 0 && (
             <div className="image-previews">
-              {images.map((img, index) => (
+              {imageUrls.map((url, index) => (
                 <div key={index} className="image-preview">
-                  <img src={URL.createObjectURL(img)} alt={`Preview ${index + 1}`} />
+                  <img src={url} alt={`Preview ${index + 1}`} />
                   <button 
                     type="button" 
                     className="remove-image"
