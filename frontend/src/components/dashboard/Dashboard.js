@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -27,32 +27,46 @@ const Dashboard = () => {
         <div className="dashboard-sidebar">
           <nav>
             <ul>
-              <li><a href="/dashboard">Dashboard</a></li>
-              <li><a href="/profile">Profile</a></li>
+              <li><Link to="/dashboard">Dashboard</Link></li>
+              <li><Link to="/profile">Profile</Link></li>
+              
+              {/* Jobs Section */}
+              <li className="nav-section">Jobs</li>
+              <li><Link to="/jobs">Browse Jobs</Link></li>
+              {user?.role === 'driver' && (
+                <li><Link to="/my-applications">My Applications</Link></li>
+              )}
+              
+              {/* Owner Section */}
               {user?.role === 'owner' && (
                 <>
-                  <li><a href="/jobs">My Jobs</a></li>
-                  <li><a href="/cars">My Cars</a></li>
+                  <li className="nav-section">My Cars</li>
+                  <li><Link to="/cars">My Vehicles</Link></li>
+                  <li><Link to="/my-documents">Documents</Link></li>
                 </>
               )}
-              {user?.role === 'driver' && (
-                <>
-                  <li><a href="/jobs/browse">Browse Jobs</a></li>
-                  <li><a href="/applications">My Applications</a></li>
-                </>
-              )}
+              
+              {/* Bookings Section */}
+              <li className="nav-section">Bookings</li>
+              <li><Link to="/my-bookings">My Bookings</Link></li>
+              
+              {/* Admin Section */}
               {user?.role === 'admin' && (
                 <>
-                  <li><a href="/admin/users">Manage Users</a></li>
-                  <li><a href="/admin/approvals">Pending Approvals</a></li>
-                  <li><a href="/admin/analytics">Analytics</a></li>
+                  <li className="nav-section">Admin</li>
+                  <li><Link to="/admin/pending-cars">Pending Cars</Link></li>
+                  <li><Link to="/admin/pending-documents">Pending Documents</Link></li>
+                  <li><Link to="/admin/users">Manage Users</Link></li>
+                  <li><Link to="/admin/analytics">Analytics</Link></li>
                 </>
               )}
-              <li><a href="/marketplace">Marketplace</a></li>
-              <li><a href="/bookings">Bookings</a></li>
-              <li><a href="/forum">Community Forum</a></li>
-              <li><a href="/services">Service Centers</a></li>
-              <li><a href="/support">Support</a></li>
+              
+              {/* Other */}
+              <li className="nav-section">Other</li>
+              <li><Link to="/marketplace">Marketplace</Link></li>
+              <li><Link to="/forum">Community Forum</Link></li>
+              <li><Link to="/services">Service Centers</Link></li>
+              <li><Link to="/support">Support</Link></li>
             </ul>
           </nav>
         </div>
@@ -95,32 +109,52 @@ const Dashboard = () => {
             </div>
 
             <div className="features-section">
-              <h3>Available Features</h3>
+              <h3>Quick Actions</h3>
               <div className="features-grid">
-                <div className="feature-card">
-                  <h4>🚘 Car Management</h4>
-                  <p>List and manage your vehicles</p>
-                </div>
-                <div className="feature-card">
-                  <h4>👨‍💼 Driver Hiring</h4>
-                  <p>Post jobs and hire drivers</p>
-                </div>
-                <div className="feature-card">
-                  <h4>📅 Booking System</h4>
-                  <p>Schedule and track bookings</p>
-                </div>
-                <div className="feature-card">
+                <Link to="/jobs" className="feature-card">
+                  <h4>👨‍💼 Driver Jobs</h4>
+                  <p>Browse and apply for driver positions</p>
+                </Link>
+                <Link to="/my-bookings" className="feature-card">
+                  <h4>📅 My Bookings</h4>
+                  <p>View and manage your bookings</p>
+                </Link>
+                {user?.role === 'owner' && (
+                  <Link to="/my-documents" className="feature-card">
+                    <h4>📄 Documents</h4>
+                    <p>Manage car documents & renewals</p>
+                  </Link>
+                )}
+                {user?.role === 'driver' && (
+                  <Link to="/my-applications" className="feature-card">
+                    <h4>📋 Applications</h4>
+                    <p>Track your job applications</p>
+                  </Link>
+                )}
+                <Link to="/marketplace" className="feature-card">
                   <h4>🛒 Marketplace</h4>
                   <p>Buy car parts and accessories</p>
-                </div>
-                <div className="feature-card">
+                </Link>
+                <Link to="/forum" className="feature-card">
                   <h4>💬 Community</h4>
                   <p>Connect with other users</p>
-                </div>
-                <div className="feature-card">
+                </Link>
+                <Link to="/services" className="feature-card">
                   <h4>🔧 Service Centers</h4>
                   <p>Find nearby service locations</p>
-                </div>
+                </Link>
+                {user?.role === 'admin' && (
+                  <>
+                    <Link to="/admin/pending-cars" className="feature-card admin">
+                      <h4>🚗 Pending Cars</h4>
+                      <p>Approve or reject car listings</p>
+                    </Link>
+                    <Link to="/admin/pending-documents" className="feature-card admin">
+                      <h4>📄 Pending Docs</h4>
+                      <p>Verify uploaded documents</p>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
