@@ -15,7 +15,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
-        <h1>Dhon - Car Management Platform</h1>
+        <h1>Carshahajjo</h1>
         <div className="user-info">
           <span>Welcome, {user?.name}!</span>
           <span className="role-badge">{user?.role}</span>

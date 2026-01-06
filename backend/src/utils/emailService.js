@@ -31,7 +31,7 @@ const sendEmail = async ({ to, subject, html, text, attachments }) => {
     const transporter = createTransporter();
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || '"Dhon Platform" <noreply@dhon.com>',
+      from: process.env.EMAIL_FROM || '"Carshahajjo" <noreply@carshahajjo.com>',
       to,
       subject,
       html,
@@ -53,7 +53,7 @@ const sendEmail = async ({ to, subject, html, text, attachments }) => {
 const sendWelcomeEmail = async (user) => {
   return sendEmail({
     to: user.email,
-    subject: 'Welcome to Dhon Platform!',
+    subject: 'Welcome to Carshahajjo!',
     html: `
       <!DOCTYPE html>
       <html>
@@ -61,21 +61,21 @@ const sendWelcomeEmail = async (user) => {
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #4CAF50; color: white; padding: 20px; text-align: center; }
+          .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
           .content { padding: 20px; background: #f9f9f9; }
-          .button { display: inline-block; padding: 10px 20px; background: #4CAF50; color: white; text-decoration: none; border-radius: 5px; }
+          .button { display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 5px; }
           .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
-            <h1>Welcome to Dhon!</h1>
+            <h1>Welcome to Carshahajjo!</h1>
           </div>
           <div class="content">
             <h2>Hello ${user.name}!</h2>
-            <p>Thank you for joining Dhon - Your Complete Car Management Platform.</p>
-            <p>With Dhon, you can:</p>
+            <p>Thank you for joining Carshahajjo - Your Complete Car Management Platform.</p>
+            <p>With Carshahajjo, you can:</p>
             <ul>
               <li>Manage your vehicles and documents</li>
               <li>Hire professional drivers</li>
@@ -89,7 +89,7 @@ const sendWelcomeEmail = async (user) => {
             </p>
           </div>
           <div class="footer">
-            <p>© ${new Date().getFullYear()} Dhon Platform. All rights reserved.</p>
+            <p>© ${new Date().getFullYear()} Carshahajjo. All rights reserved.</p>
           </div>
         </div>
       </body>

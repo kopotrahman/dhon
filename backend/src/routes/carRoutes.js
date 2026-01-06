@@ -22,14 +22,21 @@ const {
 const { authenticate, checkApproval, authorize } = require('../middleware/auth');
 const upload = require('../middleware/upload');
 
-// Car routes
-router.post('/', authenticate, checkApproval, upload.array('images', 10), createCar);
+// Car routes - public routes first
 router.get('/', getCars);
+router.get('/admin/pending', authenticate, authorize('admin'), getPendingCars);
+router.get('/admin/pending-documents', authenticate, authorize('admin'), getPendingDocuments);
+
+// Authenticated routes
+router.post('/', authenticate, checkApproval, upload.array('images', 10), createCar);
 router.get('/my-cars', authenticate, checkApproval, getMyCars);
 router.get('/expiring-documents', authenticate, getExpiringDocuments);
+
+// Routes with :id parameter
 router.get('/:id', getCarById);
 router.put('/:id', authenticate, checkApproval, upload.array('images', 10), updateCar);
 router.delete('/:id', authenticate, checkApproval, deleteCar);
+router.post('/:id/approve', authenticate, authorize('admin'), approveCar);
 
 // Availability management
 router.put('/:carId/availability', authenticate, checkApproval, updateAvailability);
@@ -40,11 +47,6 @@ router.delete('/:carId/block-dates/:blockId', authenticate, checkApproval, unblo
 router.post('/:carId/documents', authenticate, checkApproval, upload.single('document'), uploadCarDocument);
 router.put('/:carId/documents/:documentId', authenticate, checkApproval, upload.single('document'), updateCarDocument);
 router.delete('/:carId/documents/:documentId', authenticate, checkApproval, deleteCarDocument);
-
-// Admin routes
-router.get('/admin/pending', authenticate, authorize('admin'), getPendingCars);
-router.get('/admin/pending-documents', authenticate, authorize('admin'), getPendingDocuments);
 router.post('/:carId/documents/:documentId/verify', authenticate, authorize('admin'), verifyCarDocument);
-router.post('/:id/approve', authenticate, authorize('admin'), approveCar);
 
 module.exports = router;

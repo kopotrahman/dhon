@@ -1,6 +1,6 @@
 .dashboard-container {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
 }
 
 .dashboard-header {
@@ -10,12 +10,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .dashboard-header h1 {
   margin: 0;
-  font-size: 24px;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .user-info {
@@ -78,9 +83,38 @@
 }
 
 .dashboard-sidebar nav a:hover {
-  background: #f0f0f0;
+  background: linear-gradient(90deg, #f0f0f0 0%, #fff 100%);
   color: #667eea;
   border-left: 3px solid #667eea;
+}
+
+.nav-section {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #999;
+  padding: 20px 30px 10px;
+  letter-spacing: 1px;
+  border-top: 1px solid #eee;
+  margin-top: 10px;
+}
+
+.nav-section:first-child {
+  border-top: none;
+  margin-top: 0;
+}
+
+.feature-card.admin {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.feature-card.admin h4 {
+  color: white;
+}
+
+.feature-card.admin p {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .dashboard-main {

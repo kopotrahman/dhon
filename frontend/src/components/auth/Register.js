@@ -69,7 +69,7 @@ const Register = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Register for Dhon</h2>
+        <h2>Register for Carshahajjo</h2>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -79,6 +79,7 @@ const Register = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
+              placeholder="Enter your full name"
               required
             />
           </div>
@@ -89,6 +90,7 @@ const Register = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
+              placeholder="Enter your email"
               required
             />
           </div>
@@ -99,6 +101,7 @@ const Register = () => {
               name="phone"
               value={formData.phone}
               onChange={handleChange}
+              placeholder="Enter your phone number"
               required
             />
           </div>
@@ -116,6 +119,7 @@ const Register = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
+              placeholder="Enter password (min 6 characters)"
               required
               minLength="6"
             />
@@ -127,6 +131,7 @@ const Register = () => {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
+              placeholder="Confirm your password"
               required
             />
           </div>
@@ -137,6 +142,7 @@ const Register = () => {
               name="address.city"
               value={formData.address.city}
               onChange={handleChange}
+              placeholder="Enter your city"
               required
             />
           </div>
@@ -147,6 +153,7 @@ const Register = () => {
               name="address.country"
               value={formData.address.country}
               onChange={handleChange}
+              placeholder="Enter your country"
               required
             />
           </div>

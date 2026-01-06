@@ -17,6 +17,8 @@ const {
 
 // Public routes
 router.get('/available-slots', getAvailableSlots);
+router.get('/admin/all', authenticate, authorize('admin'), getAllTestDrives);
+router.get('/owner/requests', authenticate, getOwnerTestDrives);
 
 // Customer routes (authenticated)
 router.post('/', authenticate, scheduleTestDrive);
@@ -25,13 +27,7 @@ router.get('/:id', authenticate, getTestDriveById);
 router.post('/:id/reschedule', authenticate, rescheduleTestDrive);
 router.post('/:id/cancel', authenticate, cancelTestDrive);
 router.post('/:id/feedback', authenticate, submitFeedback);
-
-// Owner routes
-router.get('/owner/requests', authenticate, getOwnerTestDrives);
 router.post('/:id/confirm', authenticate, confirmTestDrive);
 router.post('/:id/complete', authenticate, completeTestDrive);
-
-// Admin routes
-router.get('/admin/all', authenticate, authorize('admin'), getAllTestDrives);
 
 module.exports = router;

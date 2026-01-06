@@ -13,15 +13,16 @@ const {
 
 // Public routes
 router.get('/', getReviews);
+
+// Admin routes - must come BEFORE /:id to avoid path conflicts
+router.get('/admin/pending', authenticate, authorize('admin'), getPendingReviews);
+
 router.get('/:id', getReviewById);
 
 // Authenticated routes
 router.post('/', authenticate, createReview);
 router.put('/:id', authenticate, updateReview);
 router.delete('/:id', authenticate, deleteReview);
-
-// Admin routes
-router.get('/admin/pending', authenticate, authorize('admin'), getPendingReviews);
 router.put('/:id/moderate', authenticate, authorize('admin'), moderateReview);
 
 module.exports = router;

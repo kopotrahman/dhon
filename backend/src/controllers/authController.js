@@ -36,18 +36,22 @@ const register = async (req, res) => {
     const verificationToken = user.generateEmailVerificationToken();
     await user.save();
 
-    // Send verification email
-    const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
-    await sendEmail({
-      to: user.email,
-      subject: 'Verify Your Email - Dhon Platform',
-      html: `
-        <h1>Welcome to Dhon!</h1>
-        <p>Please verify your email by clicking the link below:</p>
-        <a href="${verificationUrl}">Verify Email</a>
-        <p>This link expires in 24 hours.</p>
-      `
-    });
+    // Send verification email (don't block registration if email fails)
+    const verificationUrl = `${process.env.CLIENT_URL || 'http://localhost:3000'}/verify-email/${verificationToken}`;
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: 'Verify Your Email - Carshahajjo',
+        html: `
+          <h1>Welcome to Carshahajjo!</h1>
+          <p>Please verify your email by clicking the link below:</p>
+          <a href="${verificationUrl}">Verify Email</a>
+          <p>This link expires in 24 hours.</p>
+        `
+      });
+    } catch (emailError) {
+      console.log('Email sending failed (non-blocking):', emailError.message);
+    }
 
     // Generate tokens
     const token = generateToken(user._id, user.role);
@@ -68,6 +72,7 @@ const register = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Registration error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };

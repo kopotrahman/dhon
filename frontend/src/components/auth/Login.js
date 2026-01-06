@@ -39,7 +39,7 @@ const Login = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Login to Dhon</h2>
+        <h2>Login to Carshahajjo</h2>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -49,6 +49,7 @@ const Login = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
+              placeholder="Enter your email"
               required
             />
           </div>
@@ -59,6 +60,7 @@ const Login = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
+              placeholder="Enter your password"
               required
             />
           </div>

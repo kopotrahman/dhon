@@ -20,11 +20,13 @@ const {
 } = require('../controllers/marketplaceController');
 const upload = require('../middleware/upload');
 
-// Public routes
-router.get('/products', getProducts);
+// Public routes - must come before /id/:id and slug/:slug
 router.get('/products/search', searchProducts);
 router.get('/products/featured', getFeaturedProducts);
 router.get('/categories', getCategories);
+router.get('/admin/products', authenticate, authorize('admin'), getAllProducts);
+router.get('/admin/products/pending', authenticate, authorize('admin'), getPendingProducts);
+router.get('/products', getProducts);
 router.get('/products/id/:id', getProductById);
 router.get('/products/slug/:slug', getProductBySlug);
 
@@ -36,8 +38,6 @@ router.delete('/products/:id', authenticate, deleteProduct);
 router.patch('/products/:id/stock', authenticate, updateStock);
 
 // Admin routes
-router.get('/admin/products', authenticate, authorize('admin'), getAllProducts);
-router.get('/admin/products/pending', authenticate, authorize('admin'), getPendingProducts);
 router.patch('/admin/products/:id/approve', authenticate, authorize('admin'), approveProduct);
 router.patch('/admin/products/:id/featured', authenticate, authorize('admin'), setFeatured);
 
