@@ -40,6 +40,8 @@ import { OrderSuccess, OrderHistory, OrderDetail } from './components/orders';
 import { VendorDashboard, VendorRegister } from './components/vendor';
 // Test Drive Components
 import { MyTestDrives } from './components/testdrives';
+// Profile Component
+import { Profile } from './components/profile';
 import './App.css';
 
 const AdminRoute = ({ children }) => {
@@ -109,6 +111,15 @@ function App() {
                 element={
                   <PrivateRoute>
                     <Dashboard />
+                  </PrivateRoute>
+                }
+              />
+              {/* Profile Route */}
+              <Route
+                path="/profile"
+                element={
+                  <PrivateRoute>
+                    <Profile />
                   </PrivateRoute>
                 }
               />
